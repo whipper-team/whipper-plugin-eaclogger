@@ -1,7 +1,7 @@
+## Status
 [![Build Status](https://travis-ci.org/JoeLametta/morituri-eaclogger.svg?branch=master)](https://travis-ci.org/JoeLametta/morituri-eaclogger)
 
-Using
-=====
+## Using
 
 To use this plugin:
 
@@ -27,8 +27,7 @@ To use this plugin:
         rip cd rip --logger=eac
 
 
-Developers
-==========
+## Developers
 
 To use the plugin while developing uninstalled:
 

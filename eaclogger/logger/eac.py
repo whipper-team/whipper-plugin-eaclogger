@@ -1,5 +1,3 @@
-# -*- Mode: Python -*-
-
 import os
 import time
 import hashlib
@@ -87,7 +85,7 @@ class EacLogger(result.Logger):
 
         lines.append("Read offset correction                      : %d" %
                      ripResult.offset)
-        # Currently unsupported by cdparanoia
+        # Currently unsupported by "vanilla" cdparanoia
         lines.append("Overread into Lead-In and Lead-Out          : No")
         # Default for cdparanoia
         lines.append("Fill up missing offset samples with silence : Yes")
@@ -182,7 +180,7 @@ class EacLogger(result.Logger):
                              (nonHTOA - self._accuratelyRipped))
                 lines.append("")
                 lines.append("Some tracks could not be verified as accurate")
-                # The following line must be kept commented if we adhere strictly to the way EAC treats AccurateRip's CRCs mismatch
+                # The following line must be kept commented out to stick strictly to the way EAC treats AccurateRip's CRCs mismatch
                 # self._errors = True
             else:
                 lines.append("All tracks accurately ripped")
