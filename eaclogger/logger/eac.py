@@ -1,4 +1,3 @@
-import os
 import time
 import hashlib
 
@@ -159,7 +158,7 @@ class EacLogger(result.Logger):
             lines.append('')
             duration += t.testduration + t.copyduration
 
-        ### global overview
+        # global overview
         # FIXME
 
         if self._inARDatabase == 0:
@@ -172,7 +171,8 @@ class EacLogger(result.Logger):
             if self._accuratelyRipped == 0:
                 lines.append("No tracks could be verified as accurate")
                 lines.append(
-                    "You may have a different pressing from the one(s) in the database")
+                    "You may have a different pressing "
+                    "from the one(s) in the database")
             elif self._accuratelyRipped < nonHTOA:
                 lines.append("%d track(s) accurately ripped" %
                              self._accuratelyRipped)
@@ -180,7 +180,10 @@ class EacLogger(result.Logger):
                              (nonHTOA - self._accuratelyRipped))
                 lines.append("")
                 lines.append("Some tracks could not be verified as accurate")
-                # The following line must be kept commented out to stick strictly to the way EAC treats AccurateRip's CRCs mismatch
+                '''
+                The following line must be kept commented out to stick strictly
+                 to the way EAC treats AccurateRip's CRCs mismatch
+                '''
                 # self._errors = True
             else:
                 lines.append("All tracks accurately ripped")
@@ -224,12 +227,12 @@ class EacLogger(result.Logger):
         # MBV - Feed me with your kiss: replaygain 0.809875,
         # EAC's peak level 80.9 % instead of 90.0 %
         peak = trackResult.peak * 32768 / 32767
-        #lines.append('     Peak level %r' % peak)
+        # lines.append('     Peak level %r' % peak)
         lines.append('     Peak level %.1f %%' % (
             int(peak * 1000) / 10.0))
-        #level = "%.2f" % (trackResult.peak * 100.0)
-        #level = level[:-1]
-        #lines.append('     Peak level %s %%' % level)
+        # level = "%.2f" % (trackResult.peak * 100.0)
+        # level = level[:-1]
+        # lines.append('     Peak level %s %%' % level)
         if trackResult.copyspeed:
             lines.append('     Extraction speed %.1f X' % (
                 trackResult.copyspeed))
@@ -252,8 +255,10 @@ class EacLogger(result.Logger):
             else:
                 lines.append(
                     '     Cannot be verified as accurate  '
-                    '(confidence %d),  [%08X], AccurateRip returned [%08x]  (AR v1)' %
-                    (trackResult.ARDBConfidence, trackResult.ARCRC, trackResult.ARDBCRC))
+                    '(confidence %d),  [%08X], AccurateRip '
+                    'returned [%08x]  (AR v1)' %
+                    (trackResult.ARDBConfidence,
+                     trackResult.ARCRC, trackResult.ARDBCRC))
         else:
             lines.append('     Track not present in AccurateRip database')
 
