@@ -127,7 +127,7 @@ class EacLogger(result.Logger):
         if htoa and htoa.path:
             htoastart = htoa.absolute
             htoaend = table.getTrackEnd(0)
-            htoalength = table.tracks[0].getIndex(1).absolute - htoastart + 1
+            htoalength = table.tracks[0].getIndex(1).absolute - htoastart
             lines.append(
                 "       %2d  | %s | %s |    %6d    |   %6d   " % (
                     0,
