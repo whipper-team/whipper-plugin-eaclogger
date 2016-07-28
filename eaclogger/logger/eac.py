@@ -5,6 +5,7 @@ from morituri.common import common
 from morituri.configure import configure
 from morituri.result import result
 
+
 class EacLogger(result.Logger):
 
     _accuratelyRipped = 0
@@ -250,21 +251,21 @@ class EacLogger(result.Logger):
         peak = trackResult.peak * 32768 / 32767
         lines.append("     Peak level %.1f %%" % (
             int(peak * 1000) / 10.0))
-        
+
         # Extraction speed
         if trackResult.copyspeed:
             lines.append("     Extraction speed %.1f X" % (
                 trackResult.copyspeed))
-        
+
         # Track quality
         if trackResult.quality and trackResult.quality > 0.001:
             lines.append("     Track quality %.1f %%" % (
                 trackResult.quality * 100.0, ))
-        
+
         # Ripper test CRC
         if trackResult.testcrc is not None:
             lines.append("     Test CRC %08X" % trackResult.testcrc)
-        
+
         # Ripper copy CRC
         if trackResult.copycrc is not None:
             lines.append("     Copy CRC %08X" % trackResult.copycrc)
