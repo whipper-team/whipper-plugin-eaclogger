@@ -1,4 +1,5 @@
 ## Status
+
 [![Build Status](https://travis-ci.org/JoeLametta/morituri-eaclogger.svg?branch=master)](https://travis-ci.org/JoeLametta/morituri-eaclogger)
 
 ## Logger information
@@ -13,53 +14,71 @@ To use this plugin:
 
 * build it:
 
-        git clone https://github.com/JoeLametta/morituri-eaclogger.git
-        cd morituri-eaclogger
-        python2 setup.py bdist_egg
+    ```bash
+    git clone https://github.com/JoeLametta/morituri-eaclogger.git
+    cd morituri-eaclogger
+    python2 setup.py bdist_egg
+    ```
 
 * copy it to your plugin directory:
 
-        mkdir -p $HOME/.morituri/plugins
-        cp dist/morituri_*egg $HOME/.morituri/plugins
+    ```bash
+    mkdir -p $HOME/.morituri/plugins
+    cp dist/morituri_*egg $HOME/.morituri/plugins
+    ```
 
 * verify that it gets recognized:
 
-        rip cd rip --help
+    ```bash
+    rip cd rip --help
+    ```
 
-   You should see `eac` as a possible logger.
+  You should see `eac` as a possible logger.
 
 * use it:
 
-        rip cd rip --logger=eac
+    ```bash
+    rip cd rip --logger=eac
+    ```
 
-## Instructions for whipper (since version [0.2.4](https://github.com/JoeLametta/whipper/releases/tag/v0.2.4))
+## Instructions for whipper
 
 To use this plugin:
 
 * build it:
 
-        git clone https://github.com/JoeLametta/morituri-eaclogger.git
-        cd morituri-eaclogger
-        python2 setup.py bdist_egg
+    ```bash
+    git clone https://github.com/JoeLametta/morituri-eaclogger.git
+    cd morituri-eaclogger
+    python2 setup.py bdist_egg
+    ```
 
 * copy it to your plugin directory:
 
-        export XDG_DATA_HOME=${XDG_DATA_HOME:-"${HOME}/.local/share"}
-        mkdir -p $XDG_DATA_HOME/whipper/plugins
-        cp dist/morituri_*egg $XDG_DATA_HOME/whipper/plugins
+    ```bash
+    export XDG_DATA_HOME=${XDG_DATA_HOME:-"${HOME}/.local/share"}
+    mkdir -p $XDG_DATA_HOME/whipper/plugins
+    cp dist/morituri_*egg $XDG_DATA_HOME/whipper/plugins
+    ```
 
 * verify that it gets recognized:
 
-        rip cd rip --help
+    ```bash
+    whipper cd rip --help
+    ```
 
-   You should see `eac` as a possible logger.
+  You should see `eac` as a possible logger.
 
 * use it:
 
-        rip cd rip -L eac
+    ```bash
+    whipper cd rip -L eac
+    ```
 
 ## Developers
 
 To use the plugin while developing uninstalled:
 
-    python2 setup.py develop --install-dir=path/to/checkout/of/morituri
+```bash
+python2 setup.py develop --install-dir=path/to/checkout/of/morituri
+```
