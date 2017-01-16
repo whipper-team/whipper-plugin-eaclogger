@@ -2,7 +2,6 @@ import time
 import hashlib
 
 from morituri.common import common
-from morituri.configure import configure
 from morituri.result import result
 
 
@@ -52,13 +51,23 @@ class EacLogger(result.Logger):
 
         # Ripper version
         # ATM differs from EAC's typical log line
-        lines.append("morituri version %s" % configure.version)
+        isWhipper = False
+        try:
+            from morituri.configure import configure
+            lines.append("morituri version %s" % configure.version)
+        except ImportError:
+            import morituri
+            lines.append("whipper version %s" % morituri.__version__)
+            isWhipper = True
         lines.append("")
 
         # Rip date
         # ATM differs from EAC's typical log line
         date = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(epoch)).strip()
-        lines.append("morituri extraction logfile from %s" % date)
+        if isWhipper:
+            lines.append("whipper extraction logfile from %s" % date)
+        else:
+            lines.append("morituri extraction logfile from %s" % date)
         lines.append("")
 
         # Artist / Album
