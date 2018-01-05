@@ -14,5 +14,5 @@ install:
   - pip install flake8
 
 script:
-  - flake8 --max-complexity 20 eaclogger/logger/eac.py
+  - flake8 --benchmark --statistics
   - python setup.py bdist_egg
