@@ -109,21 +109,33 @@ class EacLogger(result.Logger):
                      "Appended to previous track")
         lines.append("")
 
-        # ATM differs from EAC's typical log line
-        lines.append("Used output format       : %s" %
-                     ripResult.profileName)
-        # Extra lines (not included in EAC's logfiles)
-        # Are these appropriate replacements of the following missing lines?
-        # ("Selected bitrate", "Quality", "Add ID3 tag"
-        # "Command line compressor", "Additional command line options")
-        lines.append("GStreamer pipeline       : %s" %
-                     ripResult.profilePipeline)
-        lines.append("GStreamer version        : %s" %
-                     ripResult.gstreamerVersion)
-        lines.append("GStreamer Python version : %s" %
-                     ripResult.gstPythonVersion)
-        lines.append("Encoder plugin version   : %s" %
-                     ripResult.encoderVersion)
+        # Recent whipper versions do not behave like morituri ones
+        # Missing lines (unneeded?): "Selected bitrate", "Quality"
+        try:
+            # ATM differs from EAC's typical log line
+            lines.append("Used output format       : %s" %
+                         ripResult.profileName)
+            # Extra lines (not included in EAC's logfiles)
+            lines.append("GStreamer pipeline       : %s" %
+                         ripResult.profilePipeline)
+            lines.append("GStreamer version        : %s" %
+                         ripResult.gstreamerVersion)
+            lines.append("GStreamer Python version : %s" %
+                         ripResult.gstPythonVersion)
+            lines.append("Encoder plugin version   : %s" %
+                         ripResult.encoderVersion)
+        except AttributeError:
+            lines.append("Used output format              : FLAC")
+            lines.append("Add ID3 tag                     : No")
+            # Handle the case in which the distutils module isn't available
+            try:
+                from distutils.spawn import find_executable
+                flacPath = find_executable('flac')
+            except ImportError:
+                flacPath = "Unknown"
+            lines.append("Command line compressor         : %s" % flacPath)
+            lines.append("Additional command line options : "
+                         "--silent --verify -o %%d -f %%s")
         lines.append("")
         lines.append("")
 
