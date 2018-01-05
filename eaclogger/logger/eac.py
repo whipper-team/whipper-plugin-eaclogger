@@ -1,9 +1,13 @@
 import time
 import hashlib
 
-from morituri.common import common
-from morituri.result import result
-
+# ffff
+try:
+    from morituri.common import common
+    from morituri.result import result
+except ImportError:
+    from whipper.common import common
+    from whipper.result import result
 
 class EacLogger(result.Logger):
 
@@ -56,8 +60,8 @@ class EacLogger(result.Logger):
             from morituri.configure import configure
             lines.append("morituri version %s" % configure.version)
         except ImportError:
-            import morituri
-            lines.append("whipper version %s" % morituri.__version__)
+            import whipper
+            lines.append("whipper version %s" % whipper.__version__)
             isWhipper = True
         lines.append("")
 
