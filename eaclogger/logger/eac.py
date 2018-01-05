@@ -1,13 +1,14 @@
 import time
 import hashlib
 
-# ffff
+# whipper now uses 'whipper' as module name
 try:
     from morituri.common import common
     from morituri.result import result
 except ImportError:
     from whipper.common import common
     from whipper.result import result
+
 
 class EacLogger(result.Logger):
 
