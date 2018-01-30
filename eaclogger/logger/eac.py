@@ -187,6 +187,13 @@ class EacLogger(result.Logger):
         lines.append("")
         lines.append("")
 
+        # per-track
+        for t in ripResult.tracks:
+            if not t.filename:
+                continue
+            lines.extend(self.trackLog(t))
+            lines.append('')
+
         # AccurateRip summary at the end of the logfile
         if self._inARDatabase == 0:
             lines.append("None of the tracks are present "
@@ -201,27 +208,18 @@ class EacLogger(result.Logger):
                     "You may have a different pressing "
                     "from the one(s) in the database")
             elif self._accuratelyRipped < nonHTOA:
-                if self._accuratelyRipped < 10:
-                    lines.append(" %d track(s) accurately ripped" %
-                                 self._accuratelyRipped)
-                else:
-                    lines.append("%d track(s) accurately ripped" %
-                                 self._accuratelyRipped)
-                if (nonHTOA - self._accuratelyRipped) < 10:
-                    lines.append(" %d track(s) could not be verified "
-                                 "as accurate" %
-                                 (nonHTOA - self._accuratelyRipped))
-                else:
-                    lines.append("%d track(s) could not be verified "
-                                 "as accurate" %
-                                 (nonHTOA - self._accuratelyRipped))
+                lines.append("%d track(s) accurately ripped" %
+                             self._accuratelyRipped)
+                lines.append("%d track(s) could not be verified as accurate" %
+                             (nonHTOA - self._accuratelyRipped))
                 lines.append("")
                 lines.append("Some tracks could not be verified as accurate")
+
             else:
                 lines.append("All tracks accurately ripped")
         lines.append("")
 
-        # FIXME: ATM this will always pick else (when does EAC report errors)
+        # FIXME: ATM this will always pick else (when does EAC report errors?)
         if self._errors:
             lines.append("There were errors")
         else:
@@ -297,7 +295,7 @@ class EacLogger(result.Logger):
             lines.append("     Copy CRC %08X" % trackResult.copycrc)
 
         # AccurateRip track status
-        # ATM there's no support for AccurateRip V2
+        # No support for AccurateRip V2 until whipper 0.5.1
         if trackResult.accurip:
             self._inARDatabase += 1
             if trackResult.ARCRC == trackResult.ARDBCRC:
