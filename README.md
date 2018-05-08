@@ -1,6 +1,6 @@
 ## Status
 
-[![Build Status](https://travis-ci.org/JoeLametta/morituri-eaclogger.svg?branch=master)](https://travis-ci.org/JoeLametta/morituri-eaclogger)
+[![Build Status](https://travis-ci.com/JoeLametta/morituri-eaclogger.svg?branch=master)](https://travis-ci.com/JoeLametta/morituri-eaclogger)
 
 ## Logger information
 
