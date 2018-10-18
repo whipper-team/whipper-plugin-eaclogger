@@ -1,13 +1,8 @@
 import time
 import hashlib
-
-# whipper now uses 'whipper' as module name
-try:
-    from morituri.common import common
-    from morituri.result import result
-except ImportError:
-    from whipper.common import common
-    from whipper.result import result
+import whipper
+from whipper.common import common
+from whipper.result import result
 
 
 class EacLogger(result.Logger):
@@ -16,8 +11,8 @@ class EacLogger(result.Logger):
     _inARDatabase = 0
     _errors = False
 
-    # Overrides morituri's common implementation because EAC writes minutes
-    # value without zero padding it (EAC: %2d) vs (morituri: %02d)
+    # Overrides whipper's common implementation because EAC writes minutes
+    # value without zero padding it (EAC: %2d) vs (whipper: %02d)
     def _framesToMSF(self, frames):
         """Returns MSF representation of the provided frames value"""
 
@@ -28,8 +23,8 @@ class EacLogger(result.Logger):
         m = frames / common.FRAMES_PER_SECOND / 60
         return "%2d:%02d.%02d" % (m, s, f)
 
-    # Overrides morituri's common implementation because EAC writes hours
-    # value without zero padding it (EAC: %2d) vs (morituri: %02d)
+    # Overrides whipper's common implementation because EAC writes hours
+    # value without zero padding it (EAC: %2d) vs (whipper: %02d)
     # HMSF is used to represent pre-gaps' duration
     def _framesToHMSF(self, frames):
         """Returns HMSF representation of the provided frames value"""
@@ -56,23 +51,13 @@ class EacLogger(result.Logger):
 
         # Ripper version
         # ATM differs from EAC's typical log line
-        isWhipper = False
-        try:
-            from morituri.configure import configure
-            lines.append("morituri version %s" % configure.version)
-        except ImportError:
-            import whipper
-            lines.append("whipper version %s" % whipper.__version__)
-            isWhipper = True
+        lines.append("whipper version %s (eac logger)" % whipper.__version__)
         lines.append("")
 
         # Rip date
         # ATM differs from EAC's typical log line
-        date = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(epoch)).strip()
-        if isWhipper:
-            lines.append("whipper extraction logfile from %s" % date)
-        else:
-            lines.append("morituri extraction logfile from %s" % date)
+        date = time.strftime("%d. %B %Y, %R", time.gmtime(epoch)).strip()
+        lines.append("whipper extraction logfile from %s" % date)
         lines.append("")
 
         # Artist / Album
@@ -114,33 +99,18 @@ class EacLogger(result.Logger):
                      "Appended to previous track")
         lines.append("")
 
-        # Recent whipper versions do not behave like morituri ones
         # Missing lines (unneeded?): "Selected bitrate", "Quality"
+        lines.append("Used output format              : FLAC")
+        lines.append("Add ID3 tag                     : No")
+        # Handle the case in which the distutils module isn't available
         try:
-            # ATM differs from EAC's typical log line
-            lines.append("Used output format       : %s" %
-                         ripResult.profileName)
-            # Extra lines (not included in EAC's logfiles)
-            lines.append("GStreamer pipeline       : %s" %
-                         ripResult.profilePipeline)
-            lines.append("GStreamer version        : %s" %
-                         ripResult.gstreamerVersion)
-            lines.append("GStreamer Python version : %s" %
-                         ripResult.gstPythonVersion)
-            lines.append("Encoder plugin version   : %s" %
-                         ripResult.encoderVersion)
-        except AttributeError:
-            lines.append("Used output format              : FLAC")
-            lines.append("Add ID3 tag                     : No")
-            # Handle the case in which the distutils module isn't available
-            try:
-                from distutils.spawn import find_executable
-                flacPath = find_executable('flac')
-            except ImportError:
-                flacPath = "Unknown"
-            lines.append("Command line compressor         : %s" % flacPath)
-            lines.append("Additional command line options : "
-                         "--silent --verify -o %%d -f %%s")
+            from distutils.spawn import find_executable
+            flacPath = find_executable("flac")
+        except ImportError:
+            flacPath = "Unknown"
+        lines.append("Command line compressor         : %s" % flacPath)
+        lines.append("Additional command line options : "
+                     "--silent --verify -o %%d -f %%s")
         lines.append("")
         lines.append("")
 
@@ -173,8 +143,6 @@ class EacLogger(result.Logger):
 
         # For every track include information in the TOC
         for t in table.tracks:
-            # FIXME: what happens to a track start over 60 minutes ?
-            # Answer: tested empirically, everything seems OK
             start = t.getIndex(1).absolute
             length = table.getTrackLength(t.number)
             end = table.getTrackEnd(t.number)
@@ -191,8 +159,11 @@ class EacLogger(result.Logger):
         for t in ripResult.tracks:
             if not t.filename:
                 continue
-            lines.extend(self.trackLog(t))
-            lines.append('')
+            track_lines, ARDB_entry, ARDB_match = self.trackLog(t)
+            self._inARDatabase += int(ARDB_entry)
+            self._accuratelyRipped += int(ARDB_match)
+            lines.extend(track_lines)
+            lines.append("")
 
         # AccurateRip summary at the end of the logfile
         if self._inARDatabase == 0:
@@ -219,7 +190,8 @@ class EacLogger(result.Logger):
                 lines.append("All tracks accurately ripped")
         lines.append("")
 
-        # FIXME: ATM this will always pick else (when does EAC report errors?)
+        # FIXME: ATM this will always pick else
+        # When does EAC report errors? (only on abort?)
         if self._errors:
             lines.append("There were errors")
         else:
@@ -295,25 +267,47 @@ class EacLogger(result.Logger):
             lines.append("     Copy CRC %08X" % trackResult.copycrc)
 
         # AccurateRip track status
-        # No support for AccurateRip V2 until whipper 0.5.1
-        if trackResult.accurip:
-            self._inARDatabase += 1
-            if trackResult.ARCRC == trackResult.ARDBCRC:
-                lines.append(
-                    "     Accurately ripped (confidence %d)  [%08X]  (AR v1)" %
-                    (trackResult.ARDBConfidence, trackResult.ARCRC))
-                self._accuratelyRipped += 1
-            else:
-                lines.append(
-                    "     Cannot be verified as accurate  "
-                    "(confidence %d),  [%08X], AccurateRip "
-                    "returned [%08x]  (AR v1)" %
-                    (trackResult.ARDBConfidence,
-                     trackResult.ARCRC, trackResult.ARDBCRC))
+        # No support for AccurateRip v2 before whipper 0.5.1
+        ARDB_entry = 0
+        ARDB_match = 0
+        if trackResult.AR["v2"]["DBCRC"]:
+            ARDB_entry += 1
+            if trackResult.AR["v2"]["CRC"] == trackResult.AR["v2"]["DBCRC"]:
+                lines.append("     Accurately ripped "
+                             "(confidence %d)  [%s]  (AR v2)" % (
+                              trackResult.AR["v2"]["DBConfidence"],
+                              trackResult.AR["v2"]["DBCRC"].upper())
+                             )
+                ARDB_match += 1
+        elif trackResult.AR["v1"]["DBCRC"]:
+            ARDB_entry += 2
+            if trackResult.AR["v1"]["CRC"] == trackResult.AR["v1"]["DBCRC"]:
+                lines.append("     Accurately ripped "
+                             "(confidence %d)  [%s]  (AR v1)" % (
+                              trackResult.AR["v1"]["DBConfidence"],
+                              trackResult.AR["v1"]["DBCRC"].upper())
+                             )
+                ARDB_match += 1
         else:
             lines.append("     Track not present in AccurateRip database")
+        if ARDB_entry == 1 and ARDB_match == 0:
+            lines.append("     Cannot be verified as accurate  "
+                         "(confidence %d)  [%s], AccurateRip "
+                         "returned [%s]  (AR v2)" % (
+                          trackResult.AR["v2"]["DBConfidence"],
+                          trackResult.AR["v2"]["CRC"].upper(),
+                          trackResult.AR["v2"]["DBCRC"].upper())
+                         )
+        elif ARDB_entry == 2 and ARDB_match == 0:
+            lines.append("     Cannot be verified as accurate  "
+                         "(confidence %d)  [%s], AccurateRip "
+                         "returned [%s]  (AR v1)" % (
+                          trackResult.AR["v1"]["DBConfidence"],
+                          trackResult.AR["v1"]["CRC"].upper(),
+                          trackResult.AR["v1"]["DBCRC"].upper())
+                         )
 
-        # EAC emits 0 warnings even when a CRC mismatch occurs
+        # EAC emits zero warnings even when a CRC mismatch occurs
         if trackResult.testcrc == trackResult.copycrc:
             lines.append("     Copy OK")
-        return lines
+        return lines, bool(ARDB_entry), bool(ARDB_match)

@@ -1,15 +1,16 @@
 from setuptools import setup
 
 setup(
-    name="morituri-eaclogger",
-    version="0.2.4",
-    description="""morituri EAC-style logger""",
-    author="superveloman",
+    name="whipper-plugin-eaclogger",
+    version="0.3.0",
+    description="""A logger plugin for whipper which provides EAC style log reports""",
+    author="JoeLametta, superveloman",
     maintainer="JoeLametta",
+    url="https://github.com/whipper-team/whipper-plugin-eaclogger",
     packages=[
-        'eaclogger',
-        'eaclogger.logger'],
+        "eaclogger",
+        "eaclogger.logger"],
     entry_points="""
-  [morituri.logger]
+  [whipper.logger]
   eac = eaclogger.logger.eac:EacLogger
   """)
