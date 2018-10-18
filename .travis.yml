@@ -14,5 +14,5 @@ install:
   - pip install flake8
 
 script:
-  - flake8 --benchmark --statistics
+  - flake8 --benchmark --statistics --exclude="setup.py"
   - python setup.py bdist_egg
