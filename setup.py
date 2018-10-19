@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="whipper-plugin-eaclogger",
-    version="0.3.1",
+    version="0.3.2",
     description="Logger plugin for whipper which provides EAC style reports",
     author="JoeLametta, superveloman",
     maintainer="JoeLametta",

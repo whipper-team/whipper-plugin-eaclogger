@@ -51,7 +51,7 @@ class EacLogger(result.Logger):
 
         # Ripper version
         # ATM differs from EAC's typical log line
-        lines.append("whipper version %s "(eac logger 0.3.1)" % (
+        lines.append("whipper version %s (eac logger 0.3.2)" % (
             whipper.__version__))
         lines.append("")
 
