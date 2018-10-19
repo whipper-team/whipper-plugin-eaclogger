@@ -30,8 +30,8 @@ To use this plugin:
 
     ```bash
     export XDG_DATA_HOME=${XDG_DATA_HOME:-"${HOME}/.local/share"}
-    mkdir -p $XDG_DATA_HOME/whipper/plugins
-    cp dist/morituri_*egg $XDG_DATA_HOME/whipper/plugins
+    mkdir -p "$XDG_DATA_HOME/whipper/plugins"
+    cp "dist/whipper_plugin_eaclogger*.egg" "$XDG_DATA_HOME/whipper/plugins"
     ```
 
 * verify that it gets recognized:

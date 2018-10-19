@@ -51,7 +51,8 @@ class EacLogger(result.Logger):
 
         # Ripper version
         # ATM differs from EAC's typical log line
-        lines.append("whipper version %s (eac logger)" % whipper.__version__)
+        lines.append("whipper version %s "(eac logger 0.3.1)" % (
+            whipper.__version__))
         lines.append("")
 
         # Rip date
@@ -76,11 +77,9 @@ class EacLogger(result.Logger):
         # Extra line (not included in EAC's logfiles)
         lines.append("Use cdparanoia mode     : Yes (cdparanoia %s)" % (
             ripResult.cdparanoiaVersion))
-        defeat = "Unknown"
-        if ripResult.cdparanoiaDefeatsCache is True:
+        defeat = "No"
+        if ripResult.cdparanoiaDefeatsCache:
             defeat = "Yes"
-        if ripResult.cdparanoiaDefeatsCache is False:
-            defeat = "No"
         lines.append("Defeat audio cache      : %s" % defeat)
         lines.append("Make use of C2 pointers : No")
         lines.append("")
