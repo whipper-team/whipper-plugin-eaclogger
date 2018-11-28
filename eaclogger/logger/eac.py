@@ -51,7 +51,7 @@ class EacLogger(result.Logger):
 
         # Ripper version
         # ATM differs from EAC's typical log line
-        lines.append("whipper version %s (eac logger 0.3.2)" % (
+        lines.append("whipper version %s (eac logger 0.3.3)" % (
             whipper.__version__))
         lines.append("")
 
@@ -165,6 +165,7 @@ class EacLogger(result.Logger):
             lines.append("")
 
         # AccurateRip summary at the end of the logfile
+        lines.append("")
         if self._inARDatabase == 0:
             lines.append("None of the tracks are present "
                          "in the AccurateRip database")
@@ -205,6 +206,7 @@ class EacLogger(result.Logger):
 
         # Log checksum (uppercase hex encoded SHA256 hash of all lines)
         # It isn't compatible with EAC's one: checklog fail
+        lines.append("")
         hasher = hashlib.sha256()
         hasher.update("\n".join(lines).encode("utf-8"))
         lines.append("==== Log checksum %s ====" % hasher.hexdigest().upper())
@@ -218,10 +220,7 @@ class EacLogger(result.Logger):
         lines = []
 
         # Track number (formatting like EAC's one)
-        if trackResult.number < 10:
-            lines.append("Track  %2d" % trackResult.number)
-        else:
-            lines.append("Track %2d" % trackResult.number)
+        lines.append("Track %2d" % trackResult.number)
         lines.append("")
 
         # Filename (including path) of ripped track
@@ -243,7 +242,7 @@ class EacLogger(result.Logger):
         # and also calculating it against a max of 32767
         # MBV - Feed me with your kiss: replaygain 0.809875,
         # EAC's peak level 80.9 % instead of 90.0 %
-        peak = trackResult.peak * 32768 / 32767
+        peak = trackResult.peak / 32767.0
         lines.append("     Peak level %.1f %%" % (
             int(peak * 1000) / 10.0))
 
