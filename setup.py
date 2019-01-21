@@ -1,11 +1,13 @@
 from setuptools import setup
+from eaclogger import __version__ as plugin_version
 
 setup(
     name="whipper-plugin-eaclogger",
-    version="0.3.3",
-    description="Logger plugin for whipper which provides EAC style reports",
-    author="JoeLametta, superveloman",
+    version=plugin_version,
+    description="A plugin for whipper which provides EAC style log reports",
+    author="JoeLametta, supermanvelo",
     maintainer="JoeLametta",
+    license="ISC License",
     url="https://github.com/whipper-team/whipper-plugin-eaclogger",
     packages=["eaclogger", "eaclogger.logger"],
     entry_points={

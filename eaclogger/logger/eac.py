@@ -1,3 +1,4 @@
+import eaclogger
 import time
 import hashlib
 import whipper
@@ -51,8 +52,8 @@ class EacLogger(result.Logger):
 
         # Ripper version
         # ATM differs from EAC's typical log line
-        lines.append("whipper version %s (eac logger 0.3.3)" % (
-            whipper.__version__))
+        lines.append("whipper version %s (eac logger %s)" % (
+            whipper.__version__, eaclogger.__version__))
         lines.append("")
 
         # Rip date
