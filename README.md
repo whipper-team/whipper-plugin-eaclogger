@@ -1,6 +1,6 @@
 ## Status
 
-[![License](https://img.shields.io/github/license/whipper-team/whipper-plugin-eaclogger.svg)](https://github.com/whipper-team/whipper-plugin-eaclogger/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-ISC-green.svg)](https://github.com/whipper-team/whipper-plugin-eaclogger/blob/master/LICENSE)
 [![Build Status](https://travis-ci.com/whipper-team/whipper-plugin-eaclogger.svg?branch=master)](https://travis-ci.com/whipper-team/whipper-plugin-eaclogger)
 [![GitHub (pre-)release](https://img.shields.io/github/release/whipper-team/whipper-plugin-eaclogger/all.svg)](https://github.com/whipper-team/whipper-plugin-eaclogger/releases/latest)
 
