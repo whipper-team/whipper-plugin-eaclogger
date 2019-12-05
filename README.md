@@ -13,7 +13,7 @@ got particular requirements, I suggest using whipper's default logger.
 The logger should be feature complete so future development will consist
 mainly of bugfixes.
 
-If you're looking for the analogous morituri plugin, it can be found
+If you're looking for the analogous (legacy) morituri plugin, it can be found
 [here](https://github.com/whipper-team/morituri-plugin-eaclogger).
 
 ## License
@@ -29,7 +29,7 @@ To use this plugin:
     ```bash
     git clone https://github.com/whipper-team/whipper-plugin-eaclogger.git
     cd whipper-plugin-eaclogger
-    python2 setup.py bdist_egg
+    python3 setup.py bdist_egg
     ```
 
 * copy it to your local plugin directory:
@@ -59,5 +59,5 @@ To use this plugin:
 To use the plugin while developing uninstalled:
 
 ```bash
-python2 setup.py develop --install-dir=path/to/checkout/of/whipper
+python3 setup.py develop --install-dir=path/to/checkout/of/whipper
 ```

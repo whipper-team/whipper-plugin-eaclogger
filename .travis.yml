@@ -3,16 +3,16 @@ sudo: false
 language: python
 
 python:
-  - "2.7"
+  - "3.5"
 
 branches:
   only:
     - master
 
 install:
-  - pip install --upgrade pip
-  - pip install flake8
+  - pip3 install --upgrade pip
+  - pip3 install flake8
 
 script:
   - flake8 --benchmark --statistics
-  - python setup.py bdist_egg
+  - python3 setup.py bdist_egg
