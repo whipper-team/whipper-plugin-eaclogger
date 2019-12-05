@@ -20,7 +20,7 @@ class EacLogger(result.Logger):
         f = frames % common.FRAMES_PER_SECOND
         frames -= f
         s = (frames / common.FRAMES_PER_SECOND) % 60
-        frames -= s * 60
+        frames -= s * common.FRAMES_PER_SECOND
         m = frames / common.FRAMES_PER_SECOND / 60
         return "%2d:%02d.%02d" % (m, s, f)
 
@@ -33,9 +33,9 @@ class EacLogger(result.Logger):
         f = frames % common.FRAMES_PER_SECOND
         frames -= f
         s = (frames / common.FRAMES_PER_SECOND) % 60
-        frames -= s * 60
-        m = frames / common.FRAMES_PER_SECOND / 60
-        frames -= m * 60
+        frames -= s * common.FRAMES_PER_SECOND
+        m = (frames / common.FRAMES_PER_SECOND / 60) % 60
+        frames -= m * common.FRAMES_PER_SECOND * 60
         h = frames / common.FRAMES_PER_SECOND / 60 / 60
         return "%2d:%02d:%02d.%02d" % (h, m, s, f)
 
